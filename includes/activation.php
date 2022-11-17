@@ -42,9 +42,8 @@ function ncs4_knowledgeportal_post_type() {
                     'custom-fields',
                 ),
                 'taxonomies'  => array(
-                    'Sports',
-                    'Safety',
-                    'Spectator',
+                    'category',
+                    'post_tag',
                 ),
         )
     );
