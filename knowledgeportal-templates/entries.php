@@ -3,7 +3,7 @@
     $post_content ='';
     $post_content .= '<li>'.$post_title .'</li>'; 
     $post_content .= '<li> Posted by: '. $post_author .'</li>'; 
-    $post_content .= '<li>'.$post_excerpt.'</li>';
+    $post_content .= '<li>'.$post_content_this.'</li>';
     $post_content .= '<li> <a href="'.$post_attachment_link.'">'.$post_attachment_type.'</a></li>';
     $post_content .= '<li>'.$post_posted_date.'</li>'; 
     $post_content .= '----------------------------------------------------------';
