@@ -4,9 +4,17 @@ require_once plugin_dir_path(__FILE__) . '/entries.php';
 require_once plugin_dir_path(__FILE__) . '../includes/kp-getposts-by-folders.php';
 
 function ncs4_knowledgeportal_entires() {
+
+	ob_start();
     $posts_available = ncs4_get_knowledgeportal_entires();
     $content = '<ul style="list-style:none;">';
 
+
+	$templates = new KP_Template_Loader;
+ 
+	$templates->get_template_part( 'entries-loop' );
+
+    get_template_part('templates/entries-loop');
     foreach ($posts_available as $folder_name => $post_array) {
 
         $content .= '<li>'.$folder_name.'</li>';
@@ -18,7 +26,7 @@ function ncs4_knowledgeportal_entires() {
     }
 
     $content .= '</ul>';
-    return $content;
+    return ob_get_clean();
 }
 
 

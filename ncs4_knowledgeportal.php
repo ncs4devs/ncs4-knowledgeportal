@@ -105,6 +105,8 @@ final class knowledgePortal {
 		// Templates
 		$this->themes_dir   = apply_filters( 'kp_themes_dir',   trailingslashit( $this->plugin_dir . 'templates' ) );
 		$this->themes_url   = apply_filters( 'kp_themes_url',   trailingslashit( $this->plugin_url . 'templates' ) );
+
+		define( 'KP_PLUGIN_PATH', plugin_dir_path( __FILE__ ) );
 	}
 
     /**
@@ -126,8 +128,11 @@ final class knowledgePortal {
 	 */
 	private function includes() {
          
-        require plugin_dir_path(__FILE__) . '/includes/kp-registerposttype.php';
-        require plugin_dir_path(__FILE__) . '/templates/dashboard.php';
+        require $this->includes_dir . '/kp-registerposttype.php';
+        require $this->themes_dir . '/dashboard.php';
+
+		require KP_PLUGIN_PATH . 'class-gamajo-template-loader.php';
+		require KP_PLUGIN_PATH . 'class-kp-template-loader.php';
 	}
 
 	/**
