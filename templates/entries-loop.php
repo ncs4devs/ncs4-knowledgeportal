@@ -1,50 +1,76 @@
-<?php 
-//get all terms in the Folder taxonomy
+<?php
+// template file to display posts categorized by ncs4_knowledgeportal_folders taxonomy
+
+// get all terms in the ncs4_knowledgeportal_folders taxonomy
 $terms = get_terms( array(
     'taxonomy' => 'ncs4_knowledgeportal_folders',
-    'hide_empty' => false
+    'hide_empty' => true,
 ) );
 
-//loop through each term
-foreach ( $terms as $term ) {
-    //display term name as button
-    echo '<button class="folder-button" data-slug="' . $term->slug . '">' . $term->name . '</button>';
+// create a term for the main category with all the posts
+$main_term = new stdClass();
+$main_term->term_id = 0;
+$main_term->name = 'Main';
 
-    //get all posts in the term
-    $args = array(
-        'post_type'     => 'kp_entry',
-        'post_status'   => 'publish',
-        'post_per_page' => 50,
-        'orderby'       =>'meta_value',
-        'meta_key'      => array('_attachment_link','_attachment_type', '_posted_date'),
-        'order'         =>'ASC'
-    );
-    $posts = new WP_Query($args);
+// get all posts
+$posts = get_posts( array(
+    'post_type' => 'kp_entry',
+) );
 
-    //loop through each post and display title and excerpt
-    if ( $posts->have_posts() ) {
-        echo '<div class="folder-posts" id="' . $term->slug . '">';
-        while ( $posts->have_posts() ) {
-            $posts->the_post();
-            get_the_title();
-            the_excerpt();
-        }
-        echo '</div>';
-    }
-
-    //reset post data
-    wp_reset_postdata();
-}
-
-//jquery to hide/show posts based on clicked button
+$templates = new KP_Template_Loader;
 ?>
-<script>
-jQuery(document).ready(function($){
-    //show posts when button is clicked
-    $('.folder-button').click(function(){
-        var slug = $(this).data('slug');
-        $('.folder-posts').hide();
-        $('#' + slug).show();
-    });
-});
-</script>
+
+<div class="kp-folder-columns">
+    <div class="kp-folder-names">
+        <!-- main category with all the posts -->
+        <div class="kp-folder-name-button active" data-term="<?php echo esc_attr( $main_term->term_id ); ?>">
+            <?php echo esc_html( $main_term->name ); ?>
+        </div>
+
+        <!-- other categories -->
+        <?php foreach ( $terms as $term ) : ?>
+            <!-- display the term name as a div element that looks like a button -->
+            <div class="kp-folder-name-button" data-term="<?php echo esc_attr( $term->term_id ); ?>">
+                <?php echo esc_html( $term->name ); ?>
+            </div>
+        <?php endforeach; ?>
+    </div>
+
+    <div class="kp-folder-posts">
+        <!-- main category with all the posts -->
+        <div class="kp-folder-section" data-term="<?php echo esc_attr( $main_term->term_id ); ?>">
+            <ul>
+                <?php foreach ( $posts as $post ) : ?>
+                    <?php 
+                        $templates->get_template_part( 'single-entry' ); ?>
+                <?php endforeach; ?>
+            </ul>
+        </div>
+
+        <!-- other categories -->
+        <?php foreach ( $terms as $term ) : ?>
+            <!-- get the posts in this term -->
+            <?php
+            $posts = get_posts( array(
+                'post_type' => 'kp_entry',
+                'tax_query' => array(
+                    array(
+                        'taxonomy' => 'ncs4_knowledgeportal_folders',
+                        'field' => 'term_id',
+                        'terms' => $term->term_id,
+                    ),
+                ),
+            ) );
+            ?>
+
+            <div class="kp-folder-section" data-term="<?php echo esc_attr( $term->term_id ); ?>">
+                <ul>
+                    <?php foreach ( $posts as $post ) : ?>
+                        <?php 
+                            $templates->get_template_part( 'single-entry' ); ?>
+                    <?php endforeach; ?>
+                </ul>
+            </div>
+        <?php endforeach; ?>
+    </div>
+</div>

@@ -1,0 +1,62 @@
+.blue {
+  color: blue;
+}
+
+.dashicons {
+  color: #000;
+  font-size: 32px;
+}
+
+.load-more {
+  color: blue;
+  text-decoration: underline;
+  font-size: 18px;
+}
+
+.hidden-content {
+  display: none;
+}
+
+.kp-folder-columns {
+  display: flex;
+}
+
+.kp-folder-names {
+  width: 20%;
+}
+
+.kp-folder-name-button {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  border: 1px solid black;
+  background-color: white;
+  text-align: center;
+  cursor: pointer;
+}
+
+.kp-folder-name-button.active {
+  background-color: blue;
+  color: white;
+}
+
+.kp-folder-name-button:not(.active) {
+  background-color: white;
+  color: black;
+}
+
+.kp-folder-posts {
+  width: 80%;
+  height: 500px; /* specify a fixed height for the container */
+  overflow-y: scroll; /* add scrollbar for the y-axis */
+}
+
+.kp-folder-section {
+  margin-bottom: 20px;
+}
+
+.kp-folder-section[data-term]:not([data-term="0"]) {
+  display: none;
+}
+
+/*# sourceMappingURL=index.css.map */

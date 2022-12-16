@@ -123,28 +123,40 @@ function ncs4_save_post_meta_boxes(){
 }
 
 
-// callback function to render fields
+//callback function to render fields
 function post_meta_box_knowledgeportal_attachmenttype(){
     global $post;
     $custom = get_post_custom( $post->ID );
-    $advertisingCategory = $custom[ "_attachment_type" ][ 0 ];
-    echo "<input type=\"text\" name=\"_attachment_type\" value=\"".$advertisingCategory."\" placeholder=\"Type of Attachment\">";
+    $attachment_type = $custom[ "_attachment_type" ][ 0 ];
+    ?>
+    <select name="_attachment_type">
+        <option value="Link" <?php selected( $attachment_type, 'Link' ); ?>>Link</option>
+        <option value="PDF" <?php selected( $attachment_type, 'PDF' ); ?>>PDF</option>
+        <option value="Video" <?php selected( $attachment_type, 'Video' ); ?>>Video</option>
+        <option value="Image" <?php selected( $attachment_type, 'Image' ); ?>>Image</option>
+        <option value="Document" <?php selected( $attachment_type, 'Document' ); ?>>Document</option>
+        <option value="Other" <?php selected( $attachment_type, 'Other' ); ?>>Other</option>
+    </select>
+    <?php
 }
 
-// callback function to render fields
 function post_meta_box_knowledgeportal_attachmentlink(){
     global $post;
     $custom = get_post_custom( $post->ID );
-    $advertisingCategory = $custom[ "_attachment_link" ][ 0 ];
-    echo "<input type=\"url\" name=\"_attachment_link\" value=\"".$advertisingCategory."\" placeholder=\"Attachment Link\">";
+    $attachment_link = $custom[ "_attachment_link" ][ 0 ];
+    ?>
+    <input type="url" name="_attachment_link" value="<?php echo esc_url( $attachment_link ); ?>" placeholder="Attachment Link">
+    <?php
 }
 
-// callback function to render fields
 function post_meta_box_knowledgeportal_posteddate(){
     global $post;
     $custom = get_post_custom( $post->ID );
-    $advertisingCategory = $custom[ "_posted_date" ][ 0 ];
-    echo "<input type=\"date\" name=\"_posted_date\" value=\"".$advertisingCategory."\" placeholder=\"Posted Date\">";
+    $posted_date = $custom[ "_posted_date" ][ 0 ];
+    ?>
+    <input type="date" name="_posted_date" value="<?php echo esc_attr( $posted_date ); ?>" placeholder="Posted Date">
+    <?php
 }
+
 
 ?>
