@@ -1,5 +1,5 @@
 // get all "Load More" buttons
-var loadMoreButtons = document.querySelectorAll('.load-more');
+var loadMoreButtons = document.querySelectorAll('.kp-load-more');
 
 // add click event listener to each button
 loadMoreButtons.forEach(function(button) {
@@ -8,8 +8,8 @@ loadMoreButtons.forEach(function(button) {
         var postId = this.dataset.postId;
 
         // show the hidden content for the post
-        var hiddenExcerpt = document.querySelector('.hidden-excerpt[data-post-id="' + postId + '"]');
-        var hiddenContent = document.querySelector('.hidden-content[data-post-id="' + postId + '"]');
+        var hiddenExcerpt = document.querySelector('.kp-hidden-excerpt[data-post-id="' + postId + '"]');
+        var hiddenContent = document.querySelector('.kp-hidden-content[data-post-id="' + postId + '"]');
         hiddenContent.style.display = (hiddenContent.style.display === 'none') ? 'block' : 'none';
         hiddenExcerpt.style.display = (hiddenContent.style.display === 'none') ? 'block' : 'none';
     });
@@ -47,5 +47,19 @@ folderButtons.forEach(button => {
             }
         });
     });
+});
+
+const sortDropdown = document.querySelector('.kp-sort-dropdown');
+
+sortDropdown.addEventListener('change', event => {
+    const sortOption = event.target.value;
+
+    // Sort the posts based on the selected option
+    if (sortOption === 'date-asc') {
+        // Sort the posts by date in ascending order
+    } else if (sortOption === 'date-desc') {
+        // Sort the posts by date in descending order
+    }
+    // Add handling for other sorting options
 });
 

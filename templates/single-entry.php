@@ -10,15 +10,16 @@ global $post;
 
 // check if the post exists
 if ( $post ) : ?>
-    <div class="custom-post">
+    <div class="kp-custom-post">  
+        <hr style="border-top: 1.5px solid #ccc; margin:0;">
         <!-- post title -->
-        <h3 class='blue'><?php echo esc_html( $post->post_title ); ?></h3>
+        <div class='blue'><?php echo esc_html( $post->post_title ); ?></div>
 
         <!-- post author -->
         <p>By: <?php the_author(); ?></p>
 
         <!-- hidden content, only visible when "Load More" button is clicked -->
-        <div class="hidden-excerpt" data-post-id="<?php echo $post->ID; ?>">
+        <div class="kp-hidden-excerpt" data-post-id="<?php echo $post->ID; ?>">
             <?php echo apply_filters( 'the_content', $post->post_excerpt ); ?>
         </div>
 
@@ -44,23 +45,22 @@ if ( $post ) : ?>
         ?>
 
         <!-- hidden content, only visible when "Load More" button is clicked -->
-        <div class="hidden-content" data-post-id="<?php echo $post->ID; ?>">
+        <div class="kp-hidden-content" data-post-id="<?php echo $post->ID; ?>">
             <?php echo apply_filters( 'the_content', $post->post_content ); ?>
         </div>
 
         <!-- "Load More" button, only visible if there is content -->
         <?php if ( ! empty( $post->post_content ) ) : ?>
-            <div class="load-more" data-post-id="<?php echo $post->ID; ?>">load more...</div>
+            <div class="kp-load-more" data-post-id="<?php echo $post->ID; ?>">load more...</div>
         <?php endif; ?>
 
         <!-- attachment type with Dashicon and link to attachment URL -->
         <p>
             <a href="<?php echo esc_url( $attachment_url ); ?>">
-                <span class="dashicons dashicons-<?php echo esc_attr( $attachment_type_dashicon ); ?>"></span>
+                <span class="kp-dashicons dashicons dashicons-<?php echo esc_attr( $attachment_type_dashicon ); ?>"></span>
             </a>
         </p>
         <?php endif;?>
 
-        <hr style="border-top: 1.5px solid #ccc;">
     </div>
 <?php endif; ?>
