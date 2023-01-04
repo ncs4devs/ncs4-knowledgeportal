@@ -66,6 +66,8 @@ $templates = new KP_Template_Loader;
                 <select id="kp-sort-select">
                     <option value="date-asc">Date Created - Ascending</option>
                     <option value="date-desc">Date Created - Descending</option>
+                    <option value="title-asc">Title - Ascending</option>
+                    <option value="title-desc">Title - Descending</option>
                     <!-- Add other sorting options here -->
                 </select>
             </div>
@@ -74,14 +76,13 @@ $templates = new KP_Template_Loader;
         <div class="kp-folder-posts">   
 
             <div id='kp-folder-posts-date-asc'> 
-                hi
                 <!-- main category with all the posts -->
                 <div class="kp-folder-section" data-term="<?php echo esc_attr( $main_term->term_id ); ?>">
                     <?php // get all posts
                         $posts = get_posts( array(
                             'post_type' => 'kp_entry',
                             'meta_key' => '_posted_date',
-                            'orderby' => 'meta_value_num',
+                            'orderby' => 'meta_value',
                             'order' => 'ASC',
                         ) );?>
                     <?php foreach ( $posts as $post ) : ?>
@@ -104,7 +105,7 @@ $templates = new KP_Template_Loader;
                             ),
                         ),
                         'meta_key' => '_posted_date',
-                        'orderby' => 'meta_value_num',
+                        'orderby' => 'meta_value',
                         'order' => 'ASC',
                     ) );
                     ?>
@@ -119,14 +120,13 @@ $templates = new KP_Template_Loader;
             </div>
             
             <div id='kp-folder-posts-date-desc'> 
-                hello
                 <!-- main category with all the posts -->
                 <div class="kp-folder-section" data-term="<?php echo esc_attr( $main_term->term_id ); ?>">
                     <?php // get all posts
                         $posts = get_posts( array(
                             'post_type' => 'kp_entry',
                             'meta_key' => '_posted_date',
-                            'orderby' => 'meta_value_num',
+                            'orderby' => 'meta_value',
                             'order' => 'DESC',
                         ) );?>
                     <?php foreach ( $posts as $post ) : ?>
@@ -149,7 +149,92 @@ $templates = new KP_Template_Loader;
                             ),
                         ),
                         'meta_key' => '_posted_date',
-                        'orderby' => 'meta_value_num',
+                        'orderby' => 'meta_value',
+                        'order' => 'DESC',
+                    ) );
+                    ?>
+
+                    <div class="kp-folder-section" data-term="<?php echo esc_attr( $term->term_id ); ?>">
+                        <?php foreach ( $posts as $post ) : ?>
+                            <?php 
+                                $templates->get_template_part( 'single-entry' ); ?>
+                        <?php endforeach; ?>
+                    </div>
+                <?php endforeach; ?>
+            </div>
+
+            
+            <div id='kp-folder-posts-title-asc'> 
+                <!-- main category with all the posts -->
+                <div class="kp-folder-section" data-term="<?php echo esc_attr( $main_term->term_id ); ?>">
+                    <?php // get all posts
+                        $posts = get_posts( array(
+                            'post_type' => 'kp_entry',
+                            'orderby' => 'title',
+                            'order' => 'ASC',
+                        ) );?>
+                    <?php foreach ( $posts as $post ) : ?>
+                        <?php 
+                            $templates->get_template_part( 'single-entry' ); ?>
+                    <?php endforeach; ?>
+                </div>
+
+                <!-- other categories -->
+                <?php foreach ( $terms as $term ) : ?>
+                    <!-- get the posts in this term -->
+                    <?php
+                    $posts = get_posts( array(
+                        'post_type' => 'kp_entry',
+                        'tax_query' => array(
+                            array(
+                                'taxonomy' => 'ncs4_knowledgeportal_folders',
+                                'field' => 'term_id',
+                                'terms' => $term->term_id,
+                            ),
+                        ),
+                        'orderby' => 'title',
+                        'order' => 'ASC',
+                    ) );
+                    ?>
+
+                    <div class="kp-folder-section" data-term="<?php echo esc_attr( $term->term_id ); ?>">
+                        <?php foreach ( $posts as $post ) : ?>
+                            <?php 
+                                $templates->get_template_part( 'single-entry' ); ?>
+                        <?php endforeach; ?>
+                    </div>
+                <?php endforeach; ?>
+            </div>
+            
+            <div id='kp-folder-posts-title-desc'> 
+                <!-- main category with all the posts -->
+                <div class="kp-folder-section" data-term="<?php echo esc_attr( $main_term->term_id ); ?>">
+                    <?php // get all posts
+                        $posts = get_posts( array(
+                            'post_type' => 'kp_entry',
+                            'orderby' => 'title',
+                            'order' => 'DESC',
+                        ) );?>
+                    <?php foreach ( $posts as $post ) : ?>
+                        <?php 
+                            $templates->get_template_part( 'single-entry' ); ?>
+                    <?php endforeach; ?>
+                </div>
+
+                <!-- other categories -->
+                <?php foreach ( $terms as $term ) : ?>
+                    <!-- get the posts in this term -->
+                    <?php
+                    $posts = get_posts( array(
+                        'post_type' => 'kp_entry',
+                        'tax_query' => array(
+                            array(
+                                'taxonomy' => 'ncs4_knowledgeportal_folders',
+                                'field' => 'term_id',
+                                'terms' => $term->term_id,
+                            ),
+                        ),
+                        'orderby' => 'title',
                         'order' => 'DESC',
                     ) );
                     ?>

@@ -65,6 +65,8 @@ folderButtons.forEach(button => {
 const sortDropdown = document.querySelector('.kp-sort-dropdown');
 const folderPostsDateASC = document.getElementById('kp-folder-posts-date-asc');
 const folderPostsDateDESC = document.getElementById('kp-folder-posts-date-desc');
+const folderPostsTitleASC = document.getElementById('kp-folder-posts-title-asc');
+const folderPostsTitleDESC = document.getElementById('kp-folder-posts-title-desc');
 
 sortDropdown.addEventListener('change', event => {
     const sortOption = event.target.value;
@@ -74,10 +76,26 @@ sortDropdown.addEventListener('change', event => {
         // Sort the posts by date in ascending order
         folderPostsDateASC.style.display = 'block';
         folderPostsDateDESC.style.display = 'none';
+        folderPostsTitleASC.style.display = 'none';
+        folderPostsTitleDESC.style.display = 'none';
     } else if (sortOption === 'date-desc') {
         // Sort the posts by date in descending order
         folderPostsDateASC.style.display = 'none';
         folderPostsDateDESC.style.display = 'block';
+        folderPostsTitleASC.style.display = 'none';
+        folderPostsTitleDESC.style.display = 'none';
+    } else if (sortOption === 'title-asc') {
+        // Sort the posts by date in descending order
+        folderPostsDateASC.style.display = 'none';
+        folderPostsDateDESC.style.display = 'none';
+        folderPostsTitleASC.style.display = 'block';
+        folderPostsTitleDESC.style.display = 'none';
+    } else if (sortOption === 'title-desc') {
+        // Sort the posts by date in descending order
+        folderPostsDateASC.style.display = 'none';
+        folderPostsDateDESC.style.display = 'none';
+        folderPostsTitleASC.style.display = 'none';
+        folderPostsTitleDESC.style.display = 'block';
     }
     // Add handling for other sorting options
 });
