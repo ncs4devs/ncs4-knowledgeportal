@@ -13,7 +13,6 @@
 
 .kp-load-more {
   color: blue;
-  text-decoration: underline;
   font-size: 18px;
   cursor: pointer;
 }
@@ -85,6 +84,10 @@
 }
 
 .kp-folder-section[data-term]:not([data-term="0"]) {
+  display: none;
+}
+
+#kp-folder-posts-date-desc {
   display: none;
 }
 

@@ -8,10 +8,23 @@ loadMoreButtons.forEach(function(button) {
         var postId = this.dataset.postId;
 
         // show the hidden content for the post
-        var hiddenExcerpt = document.querySelector('.kp-hidden-excerpt[data-post-id="' + postId + '"]');
-        var hiddenContent = document.querySelector('.kp-hidden-content[data-post-id="' + postId + '"]');
-        hiddenContent.style.display = (hiddenContent.style.display === 'none') ? 'block' : 'none';
-        hiddenExcerpt.style.display = (hiddenContent.style.display === 'none') ? 'block' : 'none';
+        var hiddenExcerpts = document.querySelectorAll('.kp-hidden-excerpt[data-post-id="' + postId + '"]');
+        var hiddenContents = document.querySelectorAll('.kp-hidden-content[data-post-id="' + postId + '"]');
+        var hidden = '';
+        hiddenExcerpts.forEach(function(hiddenExcerpt) {
+            hiddenExcerpt.style.display = (hiddenExcerpt.style.display === 'none') ? 'block' : 'none';
+            hidden = hiddenExcerpt.style.display;
+        })
+        hiddenContents.forEach(function(hiddenContent) {
+            hiddenContent.style.display = (hidden === 'none') ? 'block' : 'none';
+        })
+        
+        if (this.innerHTML === 'load more...') {
+            this.innerHTML = 'show less';
+          } else {
+            this.innerHTML = 'load more...';
+          }
+          
     });
 });
 
@@ -50,6 +63,8 @@ folderButtons.forEach(button => {
 });
 
 const sortDropdown = document.querySelector('.kp-sort-dropdown');
+const folderPostsDateASC = document.getElementById('kp-folder-posts-date-asc');
+const folderPostsDateDESC = document.getElementById('kp-folder-posts-date-desc');
 
 sortDropdown.addEventListener('change', event => {
     const sortOption = event.target.value;
@@ -57,8 +72,12 @@ sortDropdown.addEventListener('change', event => {
     // Sort the posts based on the selected option
     if (sortOption === 'date-asc') {
         // Sort the posts by date in ascending order
+        folderPostsDateASC.style.display = 'block';
+        folderPostsDateDESC.style.display = 'none';
     } else if (sortOption === 'date-desc') {
         // Sort the posts by date in descending order
+        folderPostsDateASC.style.display = 'none';
+        folderPostsDateDESC.style.display = 'block';
     }
     // Add handling for other sorting options
 });
