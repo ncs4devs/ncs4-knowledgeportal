@@ -100,3 +100,39 @@ sortDropdown.addEventListener('change', event => {
     // Add handling for other sorting options
 });
 
+
+const contributeButton = document.getElementById('kp-contribute-button');
+const entriesLoop = document.getElementById("kp-dashboard-entries-loop");
+const contributionForm = document.getElementById('kp-contribution-form');
+
+contributeButton.addEventListener('click', event => {
+    entriesLoop.style.display= 'none';
+    contributionForm.style.display = 'block';
+})
+
+// get the search input field
+const searchInput = document.getElementById('kp-search-input');
+
+// add a keydown event listener to the search input field
+searchInput.addEventListener('keydown', event => {
+    // check if the user pressed the enter key
+    if (event.key === 'Enter') {
+        // get the search query
+        const searchQuery = searchInput.value.trim().toLowerCase();
+        entriesLoop.style.display= 'block';
+        contributionForm.style.display = 'none';
+
+        // get all the posts
+        const posts = [...document.querySelectorAll('.kp-single-entry')];
+        posts.forEach(post => {
+             // get the post title
+             const postTitle = post.querySelector('.kp-single-entry-title').textContent.trim().toLowerCase();
+
+             if (!postTitle.includes(searchQuery)) {
+                post.style.display = 'none';
+             } else {
+                post.style.display = 'block';
+             }
+        })
+    }
+});

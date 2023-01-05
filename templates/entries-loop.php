@@ -15,9 +15,6 @@ $main_term->name = 'Main';
 // get all posts
 $posts = get_posts( array(
     'post_type' => 'kp_entry',
-    'meta_key' => '_posted_date',
-    'orderby' => 'meta_value_num',
-    'order' => 'ASC',
 ) );
 
 

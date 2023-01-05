@@ -99,4 +99,47 @@
   display: none;
 }
 
+.kp-dashboard-main-buttons-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.kp-dashboard-main-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  border: 1px solid #000;
+  padding: 0px 10px;
+  margin: 10px;
+  cursor: pointer;
+}
+
+#kp-search-button {
+  background-color: blue;
+  color: blue;
+  font-size: 1.5rem;
+}
+
+.kp-search-icon {
+  color: white;
+}
+
+#kp-contribute-button {
+  color: #000;
+  font-size: 1.5rem;
+}
+
+#kp-search-input {
+  border: none;
+  background: transparent;
+  width: 100%;
+  font-size: 1.5rem;
+  color: white;
+  text-align: center;
+}
+
 /*# sourceMappingURL=index.css.map */

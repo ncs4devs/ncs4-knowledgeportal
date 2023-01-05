@@ -1,19 +1,15 @@
 <?php
 // template file to display custom post type
 
-// enqueue the JavaScript file
-wp_enqueue_script( 'custom-post-script', plugin_dir_url( __FILE__ ) . '/js/script.js' );
-wp_enqueue_style( 'custom-post-style', plugin_dir_url( __FILE__ ) . '/css/index.css' );
-
 // get the post object
 global $post;
 
 // check if the post exists
 if ( $post ) : ?>
-    <div class="kp-custom-post">  
+    <div class="kp-custom-post kp-single-entry">  
         <hr style="border-top: 1.5px solid #ccc; margin:0;">
         <!-- post title -->
-        <div class='blue'><?php echo esc_html( $post->post_title ); ?></div>
+        <div class='blue kp-single-entry-title'><?php echo esc_html( $post->post_title ); ?></div>
 
         <!-- post author -->
         <p>By: <?php the_author(); ?></p>
