@@ -4,8 +4,8 @@
 // get the current user's data
 $current_user = wp_get_current_user();
 
-// check if the form was submitted
-if (isset($_POST['submit'])) {
+if (isset($_POST['submit']) && isset($_POST['form_submission_nonce']) && wp_verify_nonce($_POST['form_submission_nonce'], 'form_submission')) {
+    // process the form submission
     // create the post data
     $post_data = array(
         'post_title'    => sanitize_text_field($_POST['title']),
@@ -43,11 +43,14 @@ if (isset($_POST['submit'])) {
         $redirect_url = home_url('/connect/knowledge'); // change this to the URL of the page you want to redirect to
         wp_safe_redirect($redirect_url);
     }
+} else {
+    // form submission is invalid
 }
 ?>
 
 <!-- display the form -->
 <form method="post" action="">
+    <?php wp_nonce_field( 'form_submission', 'form_submission_nonce' ); ?>
     <!-- title field -->
     <p>
         <label for="title">Title:</label>
@@ -59,29 +62,43 @@ if (isset($_POST['submit'])) {
         <input type="textarea" name="excerpt" id="excerpt" required>
     </p>
 
-   <!-- attachment link field -->
-    <p>
-        <label for="_attachment_link">Attachment Link:</label>
-        <input type="text" name="_attachment_link" id="_attachment_link" required>
-    </p>
-
     <!-- attachment type dropdown -->
     <p>
         <label for="_attachment_type">Attachment Type:</label>
         <select name="_attachment_type" id="_attachment_type" required>
             <option value="">Select an attachment type</option>
-            <option value="image">Image</option>
-            <option value="pdf">PDF</option>
-            <option value="video">Video</option>
-            <option value="audio">Audio</option>
+            <option value="Link">Link</option>
+            <option value="PDF">PDF</option>
+            <option value="Video">Video</option>
+            <option value="Image">Image</option>
+            <option value="Document">Document</option>
+            <option value="Other">Other</option>
         </select>
+    </p>
+
+   <!-- attachment link field -->
+   <p>
+        <label for="_attachment_link">Attachment Link:</label>
+        <input type="text" name="_attachment_link" id="_attachment_link" required>
     </p>
 
     <!-- content field -->
     <p>
         <label for="content">Content:</label>
-        <textarea name="content" id="content"></textarea>
+        <?php
+        $content = ''; // the initial content of the editor
+        $editor_id = 'content'; // the unique ID of the editor
+        $settings = array(
+            'textarea_name' => 'content', // the name of the textarea that will be created
+            'media_buttons' => false, // show the insert media button
+            'tinymce' => true, // enable the rich text editor
+            'quicktags' => true, // enable the quicktags (HTML tags) button
+        );
+        wp_editor( $content, $editor_id, $settings );
+        ?>
     </p>
+
+
 
     <!-- submit button -->
     <p>
