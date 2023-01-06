@@ -119,7 +119,12 @@ function ncs4_save_post_meta_boxes(){
     }
     update_post_meta( $post->ID, "_attachment_link", sanitize_url( $_POST[ "_attachment_link" ] ) );
     update_post_meta( $post->ID, "_attachment_type", sanitize_text_field( $_POST[ "_attachment_type" ] ) );
-    update_post_meta( $post->ID, "_posted_date", sanitize_text_field( $_POST[ "_posted_date" ] ) );
+    if ( empty( $_POST['_posted_date'] ) ) {
+        $current_date = date_i18n( get_option( 'date_format' ), strtotime( current_time( 'mysql' ) ) );
+        update_post_meta( $post->ID, "_posted_date", $current_date );
+    } else {
+        update_post_meta( $post->ID, "_posted_date", sanitize_text_field( $_POST['_posted_date'] ) );
+    }
 }
 
 

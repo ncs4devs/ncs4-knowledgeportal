@@ -24,6 +24,8 @@ $templates = new KP_Template_Loader;
   </div>
 
   <div id='kp-contribution-form'>
-
+    <?php 
+      $templates->get_template_part('knowledge-portal-submission');
+    ?>
   </div>
 </div>

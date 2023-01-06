@@ -56,7 +56,7 @@ $templates = new KP_Template_Loader;
     <div class='kp-content-side'>
         <div class='kp-before-content'>
             <div class='kp-small-text'>
-                # Entries
+                Entries
             </div>
             <div class="kp-sort-dropdown kp-small-text">
                 <label for="kp-sort-select">Sort by:</label>
