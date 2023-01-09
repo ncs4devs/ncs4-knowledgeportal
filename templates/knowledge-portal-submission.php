@@ -1,5 +1,4 @@
 <!-- template for a form that allows users to submit 'kp-entry' -->
-
 <?php
 // get the current user's data
 $current_user = wp_get_current_user();
@@ -21,13 +20,38 @@ if (isset($_POST['submit']) && isset($_POST['form_submission_nonce']) && wp_veri
 
     // check if the post was inserted successfully
     if ($post_id) {
-        // add the attachment link as a custom field
-        update_post_meta($post_id, '_attachment_link', sanitize_text_field($_POST['_attachment_link']));
+        // check if the user submitted a link or an attachment file
+        if (isset($_POST['_attachment_link'])) {
+            // add the attachment link as a custom field
+            update_post_meta($post_id, '_attachment_link', sanitize_text_field($_POST['_attachment_link']));
+        } elseif (isset($_FILES['_attachment_file'])) {
+            // handle the attachment file upload
+            // check file size, type, etc.
+            $size = $_FILES['_attachment_file']['size'];
+            $type = $_FILES['_attachment_file']['type'];
+            if ($size > 10485760 || $type != 'application/pdf') {
+                // file is too large or not a PDF, show an error message and delete the post
+                wp_delete_post($post_id, true); // delete the post
+                $error_message = 'Error: File is too large or not a PDF.';
+            } else {
+                $uploaded_file = wp_handle_upload($_FILES['_attachment_file'], array('test_form' => false));
+                if (isset($uploaded_file['file'])) {
+                    $attachment_link = $uploaded_file['url'];
+                    // add the attachment link as a custom field
+                    update_post_meta($post_id, '_attachment_link', $attachment_link);
+                }
+            }
+        }
 
-        // add the attachment type as a custom field
-        update_post_meta($post_id, '_attachment_type', sanitize_text_field($_POST['_attachment_type']));
-
-        // add the current date as a custom field
+        // check if there was an error with the file submission
+        if (isset($error_message)) {
+            // show the error message
+            echo '<p>' . $error_message . '</p>';
+        } else {
+            // add the attachment type as a custom field
+            update_post_meta($post_id, '_attachment_type', sanitize_text_field($_POST['_attachment_type']));
+        }
+            // add the current date as a custom field
         $date_format = 'Y-m-d'; // this is the same format as in the meta box
         $current_date = date( $date_format );
         update_post_meta($post_id, '_posted_date', $current_date);
@@ -59,28 +83,23 @@ if (isset($_POST['submit']) && isset($_POST['form_submission_nonce']) && wp_veri
     <!-- excerpt field -->
     <p>
         <label for="excerpt">Excerpt:</label>
-        <input type="textarea" name="excerpt" id="excerpt" required>
+        <input type="text" name="excerpt" id="excerpt" required>
     </p>
 
-    <!-- attachment type dropdown -->
     <p>
-        <label for="_attachment_type">Attachment Type:</label>
-        <select name="_attachment_type" id="_attachment_type" required>
-            <option value="">Select an attachment type</option>
-            <option value="Link">Link</option>
-            <option value="PDF">PDF</option>
-            <option value="Video">Video</option>
-            <option value="Image">Image</option>
-            <option value="Document">Document</option>
-            <option value="Other">Other</option>
-        </select>
+        <!-- attachment field -->
+        <label for="_attachment_file">Attachment:</label>
+        <input type="file" name="_attachment_file" id="_attachment_file" required accept=".pdf, .doc, .docx, .jpg, .jpeg, .png, .gif, .mp4, .m4a, .mp3, .ogg, .wav" maxsize="10485760">
+        
+        <!-- attachment link field -->
+        <label for="_attachment_link">Link to Attachment:</label>
+        <input type="text" name="_attachment_link" id="_attachment_link" placeholder="Link Instead of File">
+    </p>    
+
+    <p>
+        
     </p>
 
-   <!-- attachment link field -->
-   <p>
-        <label for="_attachment_link">Attachment Link:</label>
-        <input type="text" name="_attachment_link" id="_attachment_link" required>
-    </p>
 
     <!-- content field -->
     <p>

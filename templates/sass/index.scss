@@ -1,6 +1,4 @@
-.blue {
-    color:blue;
-}
+@import "../../../../themes/ncs4-pro/sass/abstracts/variables/_colors.scss";
 
 .kp-dashicons {
     color: #000;
@@ -12,9 +10,20 @@
 }
 
 .kp-load-more {
-    color: blue;
+    color: $color_link-0;
     font-size: 18px;
     cursor: pointer;
+}
+
+.kp-single-entry-title {
+    color: $color_link-0;
+    font-weight: 500;
+    font-size: 1.1em;
+    margin-top: 0.5rem;
+}
+
+.kp-single-entry-author {
+    font-size: 0.7em;
 }
 
 .kp-hidden-content {
@@ -49,7 +58,7 @@
 }
 
 .kp-folder-name-button.active {
-    background-color: blue;
+    background-color: $color_link-0;
     color: white;
     width: 100%; /* 15% more width on the left side */
 }
@@ -119,8 +128,8 @@
 }
 
 #kp-search-button {
-    background-color: blue;
-    color: blue;
+    background-color: $color_link-0;
+    color: $color_link-0;
     font-size: 1.5rem;
 }
 

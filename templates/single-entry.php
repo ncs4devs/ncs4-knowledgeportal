@@ -9,10 +9,10 @@ if ( $post ) : ?>
     <div class="kp-custom-post kp-single-entry">  
         <hr style="border-top: 1.5px solid #ccc; margin:0;">
         <!-- post title -->
-        <div class='blue kp-single-entry-title'><?php echo esc_html( $post->post_title ); ?></div>
+        <div class='kp-single-entry-title'><?php echo esc_html( $post->post_title ); ?></div>
 
         <!-- post author -->
-        <p>By: <?php the_author(); ?></p>
+        <p class='kp-single-entry-author'>By: <?php the_author(); ?></p>
 
         <!-- hidden content, only visible when "Load More" button is clicked -->
         <div class="kp-hidden-excerpt" data-post-id="<?php echo $post->ID; ?>">

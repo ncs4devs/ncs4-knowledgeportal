@@ -1,7 +1,11 @@
-.blue {
-  color: blue;
-}
-
+/* These colors are kept for compatibility reasons and should not be used */
+/* These colors may be used */
+/* Colors are swapped around to be in order from darkest to lightest */
+/* Navy */
+/* Dark Blue */
+/* Yellow */
+/* Grey */
+/* Links */
 .kp-dashicons {
   color: #000;
   font-size: 2rem;
@@ -12,9 +16,20 @@
 }
 
 .kp-load-more {
-  color: blue;
+  color: #0051a5;
   font-size: 18px;
   cursor: pointer;
+}
+
+.kp-single-entry-title {
+  color: #0051a5;
+  font-weight: 500;
+  font-size: 1.1em;
+  margin-top: 0.5rem;
+}
+
+.kp-single-entry-author {
+  font-size: 0.7em;
 }
 
 .kp-hidden-content {
@@ -49,7 +64,7 @@
 }
 
 .kp-folder-name-button.active {
-  background-color: blue;
+  background-color: #0051a5;
   color: white;
   width: 100%; /* 15% more width on the left side */
 }
@@ -119,8 +134,8 @@
 }
 
 #kp-search-button {
-  background-color: blue;
-  color: blue;
+  background-color: #0051a5;
+  color: #0051a5;
   font-size: 1.5rem;
 }
 
