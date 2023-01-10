@@ -136,3 +136,26 @@ searchInput.addEventListener('keydown', event => {
         })
     }
 });
+
+var form = document.getElementById('form');
+var submitButton = document.getElementById('submit');
+var attachmentFile = document.getElementById('_attachment_file');
+var fileSizeError = document.getElementById('file_size_error');
+var maxFileSize = 10485760; // 10MB in bytes
+
+attachmentFile.addEventListener('change', function() {
+    if (this.files[0].size > maxFileSize) {
+        fileSizeError.style.display = "block";
+        submitButton.setAttribute('disabled', 'disabled');
+    } else {
+        fileSizeError.style.display = "none";
+        submitButton.removeAttribute('disabled');
+    }
+});
+
+form.addEventListener('submit', function(event) {
+    if (attachmentFile.files[0].size > maxFileSize) {
+        fileSizeError.style.display = "block";
+        event.preventDefault();
+    }
+});

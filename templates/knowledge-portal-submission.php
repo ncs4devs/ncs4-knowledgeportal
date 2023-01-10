@@ -21,36 +21,54 @@ if (isset($_POST['submit']) && isset($_POST['form_submission_nonce']) && wp_veri
     // check if the post was inserted successfully
     if ($post_id) {
         // check if the user submitted a link or an attachment file
-        if (isset($_POST['_attachment_link'])) {
-            // add the attachment link as a custom field
-            update_post_meta($post_id, '_attachment_link', sanitize_text_field($_POST['_attachment_link']));
-        } elseif (isset($_FILES['_attachment_file'])) {
+        if (!empty($_FILES['_attachment_file']['name'])) {
             // handle the attachment file upload
-            // check file size, type, etc.
-            $size = $_FILES['_attachment_file']['size'];
-            $type = $_FILES['_attachment_file']['type'];
-            if ($size > 10485760 || $type != 'application/pdf') {
-                // file is too large or not a PDF, show an error message and delete the post
-                wp_delete_post($post_id, true); // delete the post
-                $error_message = 'Error: File is too large or not a PDF.';
-            } else {
-                $uploaded_file = wp_handle_upload($_FILES['_attachment_file'], array('test_form' => false));
-                if (isset($uploaded_file['file'])) {
-                    $attachment_link = $uploaded_file['url'];
-                    // add the attachment link as a custom field
-                    update_post_meta($post_id, '_attachment_link', $attachment_link);
+            $uploaded_file = wp_handle_upload($_FILES['_attachment_file'], array('test_form' => false));
+            if (isset($uploaded_file['file'])) {
+                $attachment_link = $uploaded_file['url'];
+                update_post_meta($post_id, '_attachment_link', 'hello I am here');
+                $file_type = wp_check_filetype($uploaded_file['file']);
+                switch ($file_type['ext']) {
+                    case 'pdf':
+                        update_post_meta($post_id, '_attachment_type', 'PDF');
+                        break;
+                    case 'jpeg':
+                    case 'jpg':
+                    case 'png':
+                        update_post_meta($post_id, '_attachment_type', 'Image');
+                        break;
+                    case 'doc':
+                    case 'docx':
+                    case 'ppt':
+                    case 'pptx':
+                    case 'xls':
+                    case 'xlsx':
+                        update_post_meta($post_id, '_attachment_type', 'Document');
+                        break;
+                    case 'mp4':
+                    case 'wmv':
+                    case 'mkv':
+                    case 'flv':
+                        update_post_meta($post_id, '_attachment_type', 'Video');
+                        break;
+                    default:
+                        update_post_meta($post_id, '_attachment_type', 'Other');
+                        break;
                 }
             }
-        }
-
+        } elseif ($_POST['_attachment_link'] !='') {
+            // add the attachment link as a custom field
+            update_post_meta($post_id, '_attachment_link', sanitize_text_field($_POST['_attachment_link']));
+            update_post_meta($post_id, '_attachment_type', 'Link');
+        } 
+        
         // check if there was an error with the file submission
         if (isset($error_message)) {
             // show the error message
             echo '<p>' . $error_message . '</p>';
         } else {
             // add the attachment type as a custom field
-            update_post_meta($post_id, '_attachment_type', sanitize_text_field($_POST['_attachment_type']));
-        }
+        
             // add the current date as a custom field
         $date_format = 'Y-m-d'; // this is the same format as in the meta box
         $current_date = date( $date_format );
@@ -65,7 +83,7 @@ if (isset($_POST['submit']) && isset($_POST['form_submission_nonce']) && wp_veri
 
         // redirect to a different page
         $redirect_url = home_url('/connect/knowledge'); // change this to the URL of the page you want to redirect to
-        wp_safe_redirect($redirect_url);
+        wp_safe_redirect($redirect_url);}
     }
 } else {
     // form submission is invalid
@@ -88,18 +106,15 @@ if (isset($_POST['submit']) && isset($_POST['form_submission_nonce']) && wp_veri
 
     <p>
         <!-- attachment field -->
-        <label for="_attachment_file">Attachment:</label>
-        <input type="file" name="_attachment_file" id="_attachment_file" required accept=".pdf, .doc, .docx, .jpg, .jpeg, .png, .gif, .mp4, .m4a, .mp3, .ogg, .wav" maxsize="10485760">
         
+        <label for="_attachment_file">Submit Attachment:</label>
+        <input type="file" id="_attachment_file">
         <!-- attachment link field -->
         <label for="_attachment_link">Link to Attachment:</label>
         <input type="text" name="_attachment_link" id="_attachment_link" placeholder="Link Instead of File">
-    </p>    
-
-    <p>
         
-    </p>
-
+        <span id="file_size_error" style="display:none;color:red;">File can't be more than 10MB. You can submit a link instead.</span>
+    </p>    
 
     <!-- content field -->
     <p>
@@ -117,10 +132,8 @@ if (isset($_POST['submit']) && isset($_POST['form_submission_nonce']) && wp_veri
         ?>
     </p>
 
-
-
     <!-- submit button -->
     <p>
-        <input type="submit" name="submit" value="Submit">
+        <input type="submit" name="submit" id="submit" value="Submit">
     </p>
 </form>
