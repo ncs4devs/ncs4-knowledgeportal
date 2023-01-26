@@ -1,4 +1,4 @@
-<!-- template for a form that allows users to submit 'kp-entry' -->
+
 <?php
 // get the current user's data
 $current_user = wp_get_current_user();
@@ -12,7 +12,7 @@ if (isset($_POST['submit']) && isset($_POST['form_submission_nonce']) && wp_veri
         'post_author'   => $current_user->ID,
         'post_status'   => 'pending', // set the post status to pending
         'post_type'     => 'kp_entry',
-        'post_content'  => sanitize_text_field($_POST['content']),
+        'post_content'  => sanitize_textarea_field($_POST['content']),
     );
 
     // insert the post into the database
@@ -20,47 +20,69 @@ if (isset($_POST['submit']) && isset($_POST['form_submission_nonce']) && wp_veri
 
     // check if the post was inserted successfully
     if ($post_id) {
-        // check if the user submitted a link or an attachment file
-        if (!empty($_FILES['_attachment_file']['name'])) {
-            // handle the attachment file upload
-            $uploaded_file = wp_handle_upload($_FILES['_attachment_file'], array('test_form' => false));
-            if (isset($uploaded_file['file'])) {
-                $attachment_link = $uploaded_file['url'];
-                update_post_meta($post_id, '_attachment_link', 'hello I am here');
-                $file_type = wp_check_filetype($uploaded_file['file']);
-                switch ($file_type['ext']) {
-                    case 'pdf':
-                        update_post_meta($post_id, '_attachment_type', 'PDF');
-                        break;
-                    case 'jpeg':
-                    case 'jpg':
-                    case 'png':
-                        update_post_meta($post_id, '_attachment_type', 'Image');
-                        break;
-                    case 'doc':
-                    case 'docx':
-                    case 'ppt':
-                    case 'pptx':
-                    case 'xls':
-                    case 'xlsx':
-                        update_post_meta($post_id, '_attachment_type', 'Document');
-                        break;
-                    case 'mp4':
-                    case 'wmv':
-                    case 'mkv':
-                    case 'flv':
-                        update_post_meta($post_id, '_attachment_type', 'Video');
-                        break;
-                    default:
-                        update_post_meta($post_id, '_attachment_type', 'Other');
-                        break;
+        if (isset($_FILES['_attachment_file']) && !empty($_FILES['_attachment_file']['name'])) {
+            // check if the file meets the requirements (e.g. file type, size)
+            $file = $_FILES['_attachment_file'];
+            $file_type = wp_check_filetype($file['name']);
+            $allowed_file_types = array('jpg', 'jpeg', 'png', 'gif', 'pdf', 'mp4', 'm4a', 'mp3', 'ogg', 'wav');
+        
+            if (in_array($file_type['ext'], $allowed_file_types) && $file['size'] <= 10485760) {
+                // the file is valid, so you can proceed with uploading it
+                require_once(ABSPATH . 'wp-admin/includes/image.php');
+                require_once(ABSPATH . 'wp-admin/includes/file.php');
+                require_once(ABSPATH . 'wp-admin/includes/media.php');
+                $attachment_id = media_handle_upload('_attachment_file', $post_id);
+                if (is_wp_error($attachment_id)) {
+                    // there was an error uploading the file
+                    // you can handle the error here
+                } else {
+                    // the file was uploaded successfully
+                    // you can use the $attachment_id to get the attachment URL, etc.
+                    update_post_meta($post_id, '_attachment_link', wp_get_attachment_url($attachment_id));
+                    switch ($file_type['ext']) {
+                        case 'pdf':
+                            update_post_meta($post_id, '_attachment_type', 'PDF');
+                            break;
+                        case 'jpeg':
+                        case 'jpg':
+                        case 'png':
+                            update_post_meta($post_id, '_attachment_type', 'Image');
+                            break;
+                        case 'doc':
+                        case 'docx':
+                        case 'ppt':
+                        case 'pptx':
+                        case 'xls':
+                        case 'xlsx':
+                            update_post_meta($post_id, '_attachment_type', 'Document');
+                            break;
+                        case 'mp4':
+                        case 'wmv':
+                        case 'mkv':
+                        case 'flv':
+                            update_post_meta($post_id, '_attachment_type', 'Video');
+                            break;
+                        default:
+                            update_post_meta($post_id, '_attachment_type', 'Other');
+                            break;
+                    }
                 }
+            } else {
+                // the file is invalid
+                // you can handle the error here
             }
-        } elseif ($_POST['_attachment_link'] !='') {
-            // add the attachment link as a custom field
-            update_post_meta($post_id, '_attachment_link', sanitize_text_field($_POST['_attachment_link']));
-            update_post_meta($post_id, '_attachment_type', 'Link');
-        } 
+        } elseif(isset($_POST['_attachment_link']) && !empty($_POST['_attachment_link'])) {
+            update_post_meta($post_id, '_attachmentlink', $_POST['_attachment_link']);
+        } else {
+        // neither file nor link were provided
+        // you can handle the error here
+        }
+        
+        // if you want to check the file after upload
+        $attachment_url = get_post_meta($post_id, '_attachment_link', true);
+        if(empty($attachment_url)) {
+        // handle the error here
+        }
         
         // check if there was an error with the file submission
         if (isset($error_message)) {
@@ -75,7 +97,7 @@ if (isset($_POST['submit']) && isset($_POST['form_submission_nonce']) && wp_veri
         update_post_meta($post_id, '_posted_date', $current_date);
 
         // send an email to the specified email address
-        $to = array('aayush.gautam@usm.edu', 'l65.fread@gmail.com');
+        $to = array('l65.fread@gmail.com');
         $subject = 'NCS4 Connect : New Knowledge Portal Submission';
         $review_link = get_edit_post_link( $post_id );
         $message = 'A new submission has been made on the knowledge portal by '.$current_user->display_name.' and is pending your review. Click the following link to review and publish it: '. $review_link;
@@ -91,7 +113,7 @@ if (isset($_POST['submit']) && isset($_POST['form_submission_nonce']) && wp_veri
 ?>
 
 <!-- display the form -->
-<form method="post" action="">
+<form method="post" action="" enctype="multipart/form-data">
     <?php wp_nonce_field( 'form_submission', 'form_submission_nonce' ); ?>
     <!-- title field -->
     <p>
@@ -108,9 +130,9 @@ if (isset($_POST['submit']) && isset($_POST['form_submission_nonce']) && wp_veri
         <!-- attachment field -->
         
         <label for="_attachment_file">Submit Attachment:</label>
-        <input type="file" id="_attachment_file">
+        <input type="file" id="_attachment_file" name="_attachment_file">
         <!-- attachment link field -->
-        <label for="_attachment_link">Link to Attachment:</label>
+        <label for="_attachment_link">Submit Link Instead:</label>
         <input type="text" name="_attachment_link" id="_attachment_link" placeholder="Link Instead of File">
         
         <span id="file_size_error" style="display:none;color:red;">File can't be more than 10MB. You can submit a link instead.</span>
@@ -118,19 +140,10 @@ if (isset($_POST['submit']) && isset($_POST['form_submission_nonce']) && wp_veri
 
     <!-- content field -->
     <p>
-        <label for="content">Content:</label>
-        <?php
-        $content = ''; // the initial content of the editor
-        $editor_id = 'content'; // the unique ID of the editor
-        $settings = array(
-            'textarea_name' => 'content', // the name of the textarea that will be created
-            'media_buttons' => false, // show the insert media button
-            'tinymce' => true, // enable the rich text editor
-            'quicktags' => true, // enable the quicktags (HTML tags) button
-        );
-        wp_editor( $content, $editor_id, $settings );
-        ?>
-    </p>
+    <label for="content">Content:</label>
+    <textarea name="content" id="content" rows="10" cols="50"></textarea>
+</p>
+
 
     <!-- submit button -->
     <p>
