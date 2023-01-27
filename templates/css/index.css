@@ -157,6 +157,10 @@
   text-align: center;
 }
 
+#kp-search-input::placeholder {
+  color: white;
+}
+
 #kp-contribution-form {
   display: none;
 }
