@@ -2,6 +2,7 @@
 <?php
 // get the current user's data
 $current_user = wp_get_current_user();
+wp_enqueue_style( 'custom-post-style', plugin_dir_url( __FILE__ ) . '/css/index.css' );
 
 if (isset($_POST['submit']) && isset($_POST['form_submission_nonce']) && wp_verify_nonce($_POST['form_submission_nonce'], 'form_submission')) {
     // process the form submission
@@ -129,11 +130,12 @@ if (isset($_POST['submit']) && isset($_POST['form_submission_nonce']) && wp_veri
     <p>
         <!-- attachment field -->
         
-        <label for="_attachment_file">Submit Attachment:</label>
+        You may submit an attachment (up to 10mb) or a link. <br>
+        <label for="_attachment_file">Attachment:</label>
         <input type="file" id="_attachment_file" name="_attachment_file">
         <!-- attachment link field -->
-        <label for="_attachment_link">Submit Link Instead:</label>
-        <input type="text" name="_attachment_link" id="_attachment_link" placeholder="Link Instead of File">
+        <label for="_attachment_link">Link:</label>
+        <input type="text" name="_attachment_link" id="_attachment_link" placeholder="Link to the File">
         
         <span id="file_size_error" style="display:none;color:red;">File can't be more than 10MB. You can submit a link instead.</span>
     </p>    
@@ -144,9 +146,10 @@ if (isset($_POST['submit']) && isset($_POST['form_submission_nonce']) && wp_veri
     <textarea name="content" id="content" rows="10" cols="50"></textarea>
 </p>
 
-
-    <!-- submit button -->
-    <p>
-        <input type="submit" name="submit" id="submit" value="Submit">
+<!-- submit button -->
+<p>
+        Please note: All submissions to the Knowledge Portal are reviewed and approved by NCS⁴.</p>
+<p>
+        <input type="submit" name="submit" id="submit" value="Submit" class="kp-submission-submit-button">
     </p>
 </form>

@@ -123,40 +123,41 @@
     text-align: center;
     border: 1px solid #000;
     padding: 0px 10px;
-    margin: 10px;
+    margin: 0 10px;
     cursor: pointer;   
+    font-size: 1.5rem;
+    height: 3rem;
 }
 
 #kp-search-button {
     background-color: $color_link-0;
     color: $color_link-0;
-    font-size: 1.5rem;
 }
 
 .kp-search-icon {
     color: white;
 }
 
-#kp-contribute-button {
-    color: #000;
-    font-size: 1.5rem;
-}
 
 #kp-search-input {
     border: none;
     background: transparent;  
     width: 100%;
-    font-size: 1.5rem;
     color: white;
     text-align: center;
 }
 
 #kp-search-input::placeholder {
     color: white;
+    font-size: 1.5rem;
 }
-
-
 
 #kp-contribution-form {
     display: none;
+}
+
+#submit {
+    color: white;
+    background-color: $color_link-0;
+    font-weight: bold;
 }
