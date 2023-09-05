@@ -10,11 +10,12 @@ $terms = get_terms( array(
 // create a term for the main category with all the posts
 $main_term = new stdClass();
 $main_term->term_id = 0;
-$main_term->name = 'Main';
+$main_term->name = 'Resource Repository';
 
 // get all posts
 $posts = get_posts( array(
     'post_type' => 'kp_entry',
+    'numberposts'=> -1,
 ) );
 
 
@@ -34,6 +35,7 @@ $templates = new KP_Template_Loader;
             <?php
             $posts_current_taxonomy = get_posts( array(
                 'post_type' => 'kp_entry',
+                'numberposts'=> -1,
                 'tax_query' => array(
                     array(
                         'taxonomy' => 'ncs4_knowledgeportal_folders',
@@ -78,6 +80,7 @@ $templates = new KP_Template_Loader;
                     <?php // get all posts
                         $posts = get_posts( array(
                             'post_type' => 'kp_entry',
+                            'numberposts'=> -1,
                             'meta_key' => '_posted_date',
                             'orderby' => 'meta_value',
                             'order' => 'ASC',
@@ -94,6 +97,7 @@ $templates = new KP_Template_Loader;
                     <?php
                     $posts = get_posts( array(
                         'post_type' => 'kp_entry',
+                        'numberposts'=> -1,
                         'tax_query' => array(
                             array(
                                 'taxonomy' => 'ncs4_knowledgeportal_folders',
@@ -122,6 +126,7 @@ $templates = new KP_Template_Loader;
                     <?php // get all posts
                         $posts = get_posts( array(
                             'post_type' => 'kp_entry',
+                            'numberposts'=> -1,
                             'meta_key' => '_posted_date',
                             'orderby' => 'meta_value',
                             'order' => 'DESC',
@@ -138,6 +143,7 @@ $templates = new KP_Template_Loader;
                     <?php
                     $posts = get_posts( array(
                         'post_type' => 'kp_entry',
+                        'numberposts'=> -1,
                         'tax_query' => array(
                             array(
                                 'taxonomy' => 'ncs4_knowledgeportal_folders',
@@ -167,6 +173,7 @@ $templates = new KP_Template_Loader;
                     <?php // get all posts
                         $posts = get_posts( array(
                             'post_type' => 'kp_entry',
+                            'numberposts'=> -1,
                             'orderby' => 'title',
                             'order' => 'ASC',
                         ) );?>
@@ -182,6 +189,7 @@ $templates = new KP_Template_Loader;
                     <?php
                     $posts = get_posts( array(
                         'post_type' => 'kp_entry',
+                        'numberposts'=> -1,
                         'tax_query' => array(
                             array(
                                 'taxonomy' => 'ncs4_knowledgeportal_folders',
@@ -209,6 +217,7 @@ $templates = new KP_Template_Loader;
                     <?php // get all posts
                         $posts = get_posts( array(
                             'post_type' => 'kp_entry',
+                            'numberposts'=> -1,
                             'orderby' => 'title',
                             'order' => 'DESC',
                         ) );?>
@@ -224,6 +233,7 @@ $templates = new KP_Template_Loader;
                     <?php
                     $posts = get_posts( array(
                         'post_type' => 'kp_entry',
+                        'numberposts'=> -1,
                         'tax_query' => array(
                             array(
                                 'taxonomy' => 'ncs4_knowledgeportal_folders',
